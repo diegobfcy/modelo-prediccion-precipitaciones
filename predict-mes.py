@@ -4,12 +4,12 @@ import numpy as np
 import tensorflow as tf
 import xarray as xr
 from datetime import datetime
-from dateutil.relativedelta import relativedelta # Necesitarás instalar: pip install python-dateutil
+from dateutil.relativedelta import relativedelta 
 import matplotlib.pyplot as plt
 import os
-import joblib # Para cargar el scaler si se usó
+import joblib 
 from matplotlib.ticker import FuncFormatter
-import matplotlib.ticker as mticker # Importar para control de ticks
+import matplotlib.ticker as mticker 
 
 from config import (
     DATA_PATH, PREC_VARIABLE_NAME, TIME_DIM, Y_DIM, X_DIM,
@@ -70,7 +70,7 @@ def main():
     # --- Entrada del Usuario para la Fecha de Predicción Objetivo ---
     try:
         target_year_str = input("Ingresa el año objetivo para la predicción (ej. 2025): ")
-        target_month_str = input("Ingresa el mes objetivo para la predicción (ej. 3 para Marzo, 12 para Diciembre): ")
+        target_month_str = input("Ingresa el mes objetivo para la predicción (ej. 3 para Marzo): ")
         target_year = int(target_year_str)
         target_month = int(target_month_str)
         if not (1 <= target_month <= 12):
@@ -84,7 +84,6 @@ def main():
     ds = None # Inicializar ds a None
     try:
         # Cargar el dataset completo para obtener datos y coordenadas
-        # !!! IMPORTANTE: Usar decode_times=False aquí también !!!
         ds = xr.open_dataset(DATA_PATH, decode_times=False)
         
         num_total_data_steps = len(ds[TIME_DIM]) # Debería ser 530
@@ -274,7 +273,7 @@ def main():
 
         plt.show()
 
-        # Opcional: Guardar el array de datos predichos
+        # Guardar el array de datos predichos
         # prediction_savename = f"datos_prediccion_{target_pred_date.strftime('%Y_%m')}.npy"
         # np.save(prediction_savename, final_prediction_unscaled)
         # print(f"Array de datos predichos guardado como {prediction_savename}")
@@ -294,8 +293,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # Asegúrate de que PROCESSED_DATA_DIR exista si el scaler está allí.
-    # joblib.load manejará FileNotFoundError para el scaler_path en sí.
-    # if not os.path.exists(PROCESSED_DATA_DIR):
-    # print(f"Advertencia: El directorio de datos procesados '{PROCESSED_DATA_DIR}' podría ser necesario para el scaler.")
     main()
